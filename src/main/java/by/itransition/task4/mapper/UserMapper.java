@@ -2,6 +2,7 @@ package by.itransition.task4.mapper;
 
 import by.itransition.task4.dto.UserDto;
 import by.itransition.task4.entity.User;
+import by.itransition.task4.security.services.UserDetailsImpl;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,6 +11,7 @@ public interface UserMapper {
 
     UserDto userToUserDto(User user);
 
-    @Mapping(target = "role", constant = "USER")
     User userDtoToUser(UserDto userDto);
+
+    UserDetailsImpl userToUserDetails(User user);
 }

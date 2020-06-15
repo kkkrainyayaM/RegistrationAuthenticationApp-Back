@@ -2,29 +2,35 @@ package by.itransition.task4.dto;
 
 import by.itransition.task4.entity.Status;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 @Data
-public class UserDto {
+@RequiredArgsConstructor
+public class JwtDto {
 
+    @NonNull
+    private String token;
+
+    private String type = "Bearer";
+
+    @NonNull
     private long id;
 
-    @NotEmpty
+    @NonNull
     private String username;
 
-    @Email
-    @NotEmpty
+    @NonNull
     private String email;
 
-    @NotEmpty
+    @NonNull
     private LocalDate dateOfRegistration;
 
-    @NotEmpty
+    @NonNull
     private LocalDate dateOfLastLogin;
 
-    @NotEmpty
+    @NonNull
     private Status status;
 }
