@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "task4.jwtSecretKey",
+      "type": "java.lang.String",
+      "description": "Description for task4.jwtSecretKey."
+  }
+] }
