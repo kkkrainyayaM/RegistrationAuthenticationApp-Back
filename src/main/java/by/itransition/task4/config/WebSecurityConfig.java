@@ -1,4 +1,4 @@
-package by.itransition.task4.security;
+package by.itransition.task4.config;
 
 import by.itransition.task4.security.jwt.AuthEntryPointJwt;
 import by.itransition.task4.security.jwt.AuthTokenFilter;
@@ -26,7 +26,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthEntryPointJwt unauthorizedHandler;
     private final UserDetailsService userDetailsService;
     private final AuthTokenFilter authTokenFilter;
-    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -39,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/users/**").permitAll()
+                .authorizeRequests().antMatchers("/api/v1/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

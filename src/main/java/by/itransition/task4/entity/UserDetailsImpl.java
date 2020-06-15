@@ -1,12 +1,9 @@
-package by.itransition.task4.security.services;
+package by.itransition.task4.entity;
 
-import by.itransition.task4.entity.Status;
-import by.itransition.task4.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.val;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -49,7 +46,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return status.equals(Status.UNBLOCKED);
+        return Status.UNBLOCKED.equals(status);
     }
 
     @Override

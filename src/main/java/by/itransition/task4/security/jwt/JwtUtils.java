@@ -1,6 +1,6 @@
 package by.itransition.task4.security.jwt;
 
-import by.itransition.task4.security.services.UserDetailsImpl;
+import by.itransition.task4.entity.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;

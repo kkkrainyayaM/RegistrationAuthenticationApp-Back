@@ -33,10 +33,10 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private LocalDate dateOfRegistration;
+    private final LocalDate dateOfRegistration = LocalDate.now();
 
     @Column(nullable = false)
-    private LocalDate dateOfLastLogin;
+    private LocalDate dateOfLastLogin = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -1,5 +1,6 @@
 package by.itransition.task4.service;
 
+import by.itransition.task4.dto.LoginDto;
 import by.itransition.task4.dto.UserDto;
 import by.itransition.task4.entity.Status;
 
@@ -14,6 +15,14 @@ public interface UserService {
      * @return added user
      */
     UserDto add(UserDto user);
+
+    /**
+     * Authenticate user by surname and password
+     *
+     * @param loginDto - surname and password
+     * @return existed user
+     */
+    UserDto authenticate(LoginDto loginDto);
 
     /**
      * Delete users by ID
