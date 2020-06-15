@@ -1,11 +1,9 @@
-package by.itransition.task4.config;
+package by.itransition.task4.configuration;
 
 import by.itransition.task4.security.jwt.AuthEntryPointJwt;
 import by.itransition.task4.security.jwt.AuthTokenFilter;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
