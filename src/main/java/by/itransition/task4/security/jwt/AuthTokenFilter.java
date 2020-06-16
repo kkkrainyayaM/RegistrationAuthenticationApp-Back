@@ -22,7 +22,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-    private final JwtUtils jwtUtils;
+    private final JwtHelper jwtHelper;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -31,8 +31,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUsernameFromJwtToken(jwt);
+            if (jwt != null && jwtHelper.validateJwtToken(jwt)) {
+                String username = jwtHelper.getUsernameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null);

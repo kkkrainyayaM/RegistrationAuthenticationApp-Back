@@ -9,35 +9,41 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Date;
 
 @Slf4j
-public class JwtUtils {
+@Component
+public class JwtHelper {
 
     private static final long JWT_EXPIRATION_MS = 86400000;
 
     @Value("${task4.jwtSecretKey}")
-    private static String JWT_SECRET_KEY;
+    private static String JWT_SECRET_KEY = "itransitionAuthorizationKey";
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String encodedSecret = Base64.getEncoder().encodeToString(JWT_SECRET_KEY.getBytes());
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(new Date().getTime() + JWT_EXPIRATION_MS))
-                .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, encodedSecret)
                 .compact();
     }
 
     public String getUsernameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(JWT_SECRET_KEY)
+        String encodedSecret = Base64.getEncoder().encodeToString(JWT_SECRET_KEY.getBytes());
+        return Jwts.parser().setSigningKey(encodedSecret)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET_KEY).parseClaimsJws(authToken);
+            String encodedSecret = Base64.getEncoder().encodeToString(JWT_SECRET_KEY.getBytes());
+            Jwts.parser().setSigningKey(encodedSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             log.error("Invalid JWT signature: {}", e.getMessage());
