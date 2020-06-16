@@ -1,6 +1,7 @@
 package by.itransition.task4.service;
 
 import by.itransition.task4.dto.LoginDto;
+import by.itransition.task4.dto.SignUpDto;
 import by.itransition.task4.dto.UserDto;
 import by.itransition.task4.entity.Status;
 
@@ -14,7 +15,7 @@ public interface UserService {
      * @param user - new User
      * @return added user
      */
-    UserDto add(UserDto user);
+    UserDto add(SignUpDto user);
 
     /**
      * Authenticate user by surname and password

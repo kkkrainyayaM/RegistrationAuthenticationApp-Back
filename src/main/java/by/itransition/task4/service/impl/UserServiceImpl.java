@@ -1,13 +1,14 @@
 package by.itransition.task4.service.impl;
 
 import by.itransition.task4.dto.LoginDto;
+import by.itransition.task4.dto.SignUpDto;
 import by.itransition.task4.dto.UserDto;
 import by.itransition.task4.entity.Status;
+import by.itransition.task4.entity.UserDetailsImpl;
 import by.itransition.task4.exceptions.CredentialsAlreadyExistsException;
 import by.itransition.task4.mapper.UserMapper;
 import by.itransition.task4.repository.UserRepository;
-import by.itransition.task4.security.jwt.JwtUtils;
-import by.itransition.task4.entity.UserDetailsImpl;
+import by.itransition.task4.security.jwt.JwtHelper;
 import by.itransition.task4.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,17 +31,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final JwtUtils jwtUtils;
+    private final JwtHelper jwtHelper;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder encoder;
 
     @Override
-    public UserDto add(UserDto userDto) {
-        if (userRepository.existsByUsername(userDto.getUsername())
-                || userRepository.existsByEmail(userDto.getEmail())) {
-            throw new CredentialsAlreadyExistsException(userDto.getUsername());
+    public UserDto add(SignUpDto signUpDto) {
+        if (userRepository.existsByUsername(signUpDto.getUsername())
+                || userRepository.existsByEmail(signUpDto.getEmail())) {
+            throw new CredentialsAlreadyExistsException(signUpDto.getUsername());
         }
-        log.info("Save user: {}", userDto);
-        val user = userMapper.userDtoToUser(userDto);
+        signUpDto.setPassword(encoder.encode(signUpDto.getPassword()));
+        log.info("Save user: {}", signUpDto);
+        val user = userMapper.sigUpDtoToUser(signUpDto);
         val savedUser = userRepository.save(user);
         return userMapper.userToUserDto(savedUser);
     }
@@ -49,11 +54,12 @@ public class UserServiceImpl implements UserService {
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        String jwt = jwtHelper.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return userMapper.userDetailsToUserDto(jwt, userDetails);
     }
 
+    @Transactional
     @Override
     public int delete(List<Long> ids) {
         log.info("Users ids = {}", ids);

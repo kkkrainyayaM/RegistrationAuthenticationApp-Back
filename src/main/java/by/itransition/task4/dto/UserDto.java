@@ -2,7 +2,6 @@ package by.itransition.task4.dto;
 
 import by.itransition.task4.entity.Status;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
