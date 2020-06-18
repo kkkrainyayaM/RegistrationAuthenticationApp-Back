@@ -2,6 +2,7 @@ package by.itransition.task4.controller;
 
 import by.itransition.task4.dto.LoginDto;
 import by.itransition.task4.dto.SignUpDto;
+import by.itransition.task4.dto.StatusUpdateDto;
 import by.itransition.task4.dto.UserDto;
 import by.itransition.task4.entity.Status;
 import by.itransition.task4.service.UserService;
@@ -49,9 +50,8 @@ public class UserController {
 
     @ApiOperation(value = "Update status of user", response = List.class)
     @PutMapping("/users/status")
-    public List<UserDto> updateStatusBlocked(@RequestParam Status status,
-                                             @Valid @RequestBody List<Long> ids) {
-        return userService.updateStatus(ids, status);
+    public List<UserDto> updateStatusBlocked(@Valid @RequestBody StatusUpdateDto status) {
+        return userService.updateStatus(status);
     }
 
     @ApiOperation(value = "View a list of all users", response = List.class)

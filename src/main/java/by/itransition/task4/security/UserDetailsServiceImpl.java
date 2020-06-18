@@ -1,4 +1,4 @@
-package by.itransition.task4.service.impl;
+package by.itransition.task4.security;
 
 import by.itransition.task4.mapper.UserMapper;
 import by.itransition.task4.repository.UserRepository;

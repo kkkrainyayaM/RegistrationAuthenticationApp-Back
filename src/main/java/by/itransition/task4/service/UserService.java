@@ -2,6 +2,7 @@ package by.itransition.task4.service;
 
 import by.itransition.task4.dto.LoginDto;
 import by.itransition.task4.dto.SignUpDto;
+import by.itransition.task4.dto.StatusUpdateDto;
 import by.itransition.task4.dto.UserDto;
 import by.itransition.task4.entity.Status;
 
@@ -42,9 +43,9 @@ public interface UserService {
     /**
      * Block or unblock users by ID
      *
-     * @param id - user ID
+     * @param status - model with list of IDs and status for update
      * @return updated user
      */
-    List<UserDto> updateStatus(List<Long> id, Status status);
+    List<UserDto> updateStatus(StatusUpdateDto status);
 
 }

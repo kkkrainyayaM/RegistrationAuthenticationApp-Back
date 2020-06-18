@@ -2,6 +2,7 @@ package by.itransition.task4.service.impl;
 
 import by.itransition.task4.dto.LoginDto;
 import by.itransition.task4.dto.SignUpDto;
+import by.itransition.task4.dto.StatusUpdateDto;
 import by.itransition.task4.dto.UserDto;
 import by.itransition.task4.entity.Status;
 import by.itransition.task4.entity.UserDetailsImpl;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDto(savedUser);
     }
 
+    @Transactional
     @Override
     public UserDto authenticate(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
@@ -56,6 +59,7 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtHelper.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        userRepository.updateDateOfLastLogin(LocalDate.now(), userDetails.getId());
         return userMapper.userDetailsToUserDto(jwt, userDetails);
     }
 
@@ -78,9 +82,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> updateStatus(List<Long> ids, Status status) {
-        val usersForUpdate = userRepository.getByIdIn(ids);
-        usersForUpdate.forEach(user -> user.setStatus(status));
+    public List<UserDto> updateStatus(StatusUpdateDto status) {
+        val usersForUpdate = userRepository.getByIdIn(status.getIds());
+        usersForUpdate.forEach(user -> user.setStatus(status.getStatus()));
         userRepository.saveAll(usersForUpdate);
         log.info("Updated users: {}", usersForUpdate);
         return usersForUpdate.stream()
